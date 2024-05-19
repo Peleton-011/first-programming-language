@@ -316,6 +316,37 @@ export class Lexer {
 					);
 				}
 			}
+
+			default: {
+				//Deal with Numbers, Identifiers and Keywords
+				if (this.isDigit(char)) {
+					const num = this.scanNumber();
+					return this.tokens.push(
+						new Token(
+							TOKENS.Number,
+							num,
+							Number(num),
+							this.line,
+							this.column
+						)
+					);
+				} else if (this.isAlpha(char)) {
+					const identifier = this.scanIdentifier();
+					return this.tokens.push(
+						new Token(
+							TOKENS.Identifier,
+							identifier,
+							identifier,
+							this.line,
+							this.column
+						)
+					);
+				} else {
+					throw new EaselError(
+						`Unexpected character ${char} at line ${this.line}:${this.column}`
+					);
+				}
+			}
 		}
 	}
 
