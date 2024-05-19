@@ -110,6 +110,11 @@ export class Lexer {
 		);
 	}
 
+    //Check if character is alphanumeric
+    isAlphanumeric(char) {
+        return this.isDigit(char) || this.isLetter(char);
+    }
+
 	//Scan a number
 	scanNumber(char) {
 		let string = [char];
@@ -125,7 +130,7 @@ export class Lexer {
 	//Scan an identifier
 	scanIdentifier(char) {
 		let string = [char];
-		while (this.isLetter(this.peek()) || this.isDigit(this.peek())) {
+		while (this.isAlphanumeric(this.peek())) {
 			string.push(this.advance());
 		}
 		return string.join("");
