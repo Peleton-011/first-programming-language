@@ -86,7 +86,7 @@ export class Lexer {
 			case "(": {
 				return this.tokens.push(
 					new Token(
-						TOKENS.leftParen,
+						TOKENS.LeftParen,
 						"(",
 						"(",
 						this.line,
@@ -98,7 +98,7 @@ export class Lexer {
 			case ")": {
 				return this.tokens.push(
 					new Token(
-						TOKENS.rightParen,
+						TOKENS.RightParen,
 						")",
 						")",
 						this.line,
@@ -110,7 +110,7 @@ export class Lexer {
 			case "{": {
 				return this.tokens.push(
 					new Token(
-						TOKENS.leftBrace,
+						TOKENS.LeftBrace,
 						"{",
 						"{",
 						this.line,
@@ -122,7 +122,7 @@ export class Lexer {
 			case "}": {
 				return this.tokens.push(
 					new Token(
-						TOKENS.rightBrace,
+						TOKENS.RightBrace,
 						"}",
 						"}",
 						this.line,
@@ -134,7 +134,7 @@ export class Lexer {
 			case "[": {
 				return this.tokens.push(
 					new Token(
-						TOKENS.leftBracket,
+						TOKENS.LeftBracket,
 						"[",
 						"[",
 						this.line,
@@ -146,7 +146,7 @@ export class Lexer {
 			case "]": {
 				return this.tokens.push(
 					new Token(
-						TOKENS.rightBracket,
+						TOKENS.RightBracket,
 						"]",
 						"]",
 						this.line,
@@ -157,43 +157,43 @@ export class Lexer {
 
 			case ",": {
 				return this.tokens.push(
-					new Token(TOKENS.comma, ",", ",", this.line, this.column)
+					new Token(TOKENS.Comma, ",", ",", this.line, this.column)
 				);
 			}
 
 			case ":": {
 				return this.tokens.push(
-					new Token(TOKENS.colon, ":", ":", this.line, this.column)
+					new Token(TOKENS.Colon, ":", ":", this.line, this.column)
 				);
 			}
 
 			case ".": {
 				return this.tokens.push(
-					new Token(TOKENS.period, ".", ".", this.line, this.column)
+					new Token(TOKENS.Period, ".", ".", this.line, this.column)
 				);
 			}
 
 			case "+": {
 				return this.tokens.push(
-					new Token(TOKENS.plus, "+", "+", this.line, this.column)
+					new Token(TOKENS.Plus, "+", "+", this.line, this.column)
 				);
 			}
 
 			case "-": {
 				return this.tokens.push(
-					new Token(TOKENS.minus, "-", "-", this.line, this.column)
+					new Token(TOKENS.Minus, "-", "-", this.line, this.column)
 				);
 			}
 
 			case "*": {
 				return this.tokens.push(
-					new Token(TOKENS.asterisk, "*", "*", this.line, this.column)
+					new Token(TOKENS.Asterisk, "*", "*", this.line, this.column)
 				);
 			}
 
 			case "/": {
 				return this.tokens.push(
-					new Token(TOKENS.slash, "/", "/", this.line, this.column)
+					new Token(TOKENS.Slash, "/", "/", this.line, this.column)
 				);
 			}
 
@@ -216,7 +216,7 @@ export class Lexer {
 				const string = this.scanString(char);
 				return this.tokens.push(
 					new Token(
-						TOKENS.string,
+						TOKENS.String,
 						string,
 						string,
 						this.line,
@@ -224,6 +224,20 @@ export class Lexer {
 					)
 				);
 			}
+
+            case "|" : {
+                if (this.match("|")) {
+                    return this.tokens.push(
+                        new Token(
+                            TOKENS.Or,
+                            "||",
+                            "||",
+                            this.line,
+                            this.column
+                        )
+                    );
+                }
+            }
 		}
 	}
 
