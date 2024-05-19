@@ -225,30 +225,60 @@ export class Lexer {
 				);
 			}
 
-            case "|" : {
-                if (this.match("|")) {
-                    return this.tokens.push(
-                        new Token(
-                            TOKENS.Or,
-                            "||",
-                            "||",
-                            this.line,
-                            this.column
-                        )
-                    );
-                }
-            }
+			case "|": {
+				if (this.match("|")) {
+					return this.tokens.push(
+						new Token(TOKENS.Or, "||", "||", this.line, this.column)
+					);
+				}
+			}
+
+			case ">": {
+				if (this.match("=")) {
+					return this.tokens.push(
+						new Token(
+							TOKENS.Gte,
+							">=",
+							">=",
+							this.line,
+							this.column
+						)
+					);
+				}
+
+				return this.tokens.push(
+					new Token(TOKENS.Gt, ">", ">", this.line, this.column)
+				);
+			}
+
+			case "<": {
+				if (this.match("=")) {
+					return this.tokens.push(
+						new Token(
+							TOKENS.Lte,
+							"<=",
+							"<=",
+							this.line,
+							this.column
+						)
+					);
+				}
+
+				return this.tokens.push(
+					new Token(TOKENS.Lt, "<", "<", this.line, this.column)
+				);
+			}
 		}
 	}
 
-    //Match multiple tokens
-    match(char) {
-        if (this.peek() === char) {
-            return this.advance();
-        }
+	//Match multiple tokens
+	match(char) {
+		if (this.peek() === char) {
+			return this.advance();
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 	//Run through all tokens until EOF is found
 	scanTokens() {
