@@ -110,12 +110,21 @@ export class Lexer {
 	}
 
 	//Scan a number
-	scanNumber() {
-		let string = [];
+	scanNumber(char) {
+		let string = [char];
 		while (
 			this.isDigit(this.peek()) ||
 			(this.peek === "." && !string.includes("."))
 		) {
+			string.push(this.advance());
+		}
+		return string.join("");
+	}
+
+	//Scan an identifier
+	scanIdentifier(char) {
+		let string = [char];
+		while (this.isLetter(this.peek()) || this.isDigit(this.peek())) {
 			string.push(this.advance());
 		}
 		return string.join("");
@@ -375,6 +384,31 @@ export class Lexer {
 					);
 				} else if (this.isAlpha(char)) {
 					const identifier = this.scanIdentifier();
+
+					if (Object.keys(KEYWORDS).includes(identifier)) {
+						return this.tokens.push(
+							new Token(
+								TOKENS.Keyword,
+								identifier,
+								KEYWORDS[identifier],
+								this.line,
+								this.column
+							)
+						);
+					} else if (
+						identifier === "true" ||
+						identifier === "false"
+					) {
+						return this.tokens.push(
+							new Token(
+								TOKENS.Boolean,
+								identifier,
+								identifier === "true",
+								this.line,
+								this.column
+							)
+						);
+					}
 					return this.tokens.push(
 						new Token(
 							TOKENS.Identifier,
