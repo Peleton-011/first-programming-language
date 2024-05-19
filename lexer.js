@@ -227,6 +227,15 @@ export class Lexer {
 		}
 	}
 
+    //Match multiple tokens
+    match(char) {
+        if (this.peek() === char) {
+            return this.advance();
+        }
+
+        return false;
+    }
+
 	//Run through all tokens until EOF is found
 	scanTokens() {
 		while (this.peek() !== "\0") this.scanToken();
