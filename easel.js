@@ -13,3 +13,14 @@ const readFile = (path) => {
     })
 }
 
+const writeFile = (path, data) => {
+    return new Promise ((resolve, reject) => {
+        fs.writeFile(path, data, (err) => {
+            if (err) {
+                return reject(err)
+            } else {
+                resolve()
+            }
+        })
+    })
+}
