@@ -48,6 +48,13 @@ export class Lexer {
         throw new EaselError(`Error on ${this.line}:${this.column}: ${msg}`);
     }
 
+    //Peek next character in code
+    peek() {
+        if (this.current >= this.code.length) return "\0";
+        return this.code[this.current];
+    }
+
+    //Run through all tokens until EOF is found
     scanTokens() {
         while(this.peek() !== "\0") this.scanToken();
 
