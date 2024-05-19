@@ -54,6 +54,14 @@ export class Lexer {
         return this.code[this.current];
     }
 
+    //Advance to next character
+    advance() {
+        if (this.current >= this.code.length) return "\0";
+        this.current++;
+        this.column++;
+        return this.code[this.current - 1];
+    }
+
     //Run through all tokens until EOF is found
     scanTokens() {
         while(this.peek() !== "\0") this.scanToken();
