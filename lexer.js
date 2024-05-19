@@ -1,5 +1,5 @@
 import fs from "fs";
-import { EaselError } from "./stdlib";
+import { EaselError } from "./stdlib.js";
 
 //Getting tokens from the JSON file
 const pathToTokens = "./tokens.json";
@@ -410,7 +410,7 @@ export class Lexer {
 			default: {
 				//Deal with Numbers, Identifiers and Keywords
 				if (this.isDigit(char)) {
-					const num = this.scanNumber();
+					const num = this.scanNumber(char);
 					return this.tokens.push(
 						new Token(
 							TOKENS.Number,
@@ -420,8 +420,8 @@ export class Lexer {
 							this.column
 						)
 					);
-				} else if (this.isAlpha(char)) {
-					const identifier = this.scanIdentifier();
+				} else if (this.isLetter(char)) {
+					const identifier = this.scanIdentifier(char);
 
 					if (Object.keys(KEYWORDS).includes(identifier)) {
 						return this.tokens.push(
