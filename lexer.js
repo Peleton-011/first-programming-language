@@ -62,6 +62,183 @@ export class Lexer {
 		return this.code[this.current - 1];
 	}
 
+	//Scan a single token
+	scanToken() {
+		let char = this.advance();
+
+		switch (char) {
+			case "(": {
+				return this.tokens.push(
+					new Token(
+						TOKENS.leftParen,
+						"(",
+						"(",
+						this.line,
+						this.column
+					)
+				);
+			}
+
+            case ")": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.rightParen,
+                        ")",
+                        ")",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+
+            case "{": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.leftBrace,
+                        "{",
+                        "{",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+
+            case "}": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.rightBrace,
+                        "}",
+                        "}",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+
+            case "[": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.leftBracket,
+                        "[",
+                        "[",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+
+            case "]": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.rightBracket,
+                        "]",
+                        "]",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+
+            case ",": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.comma,
+                        ",",
+                        ",",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+
+            case ":": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.colon,
+                        ":",
+                        ":",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+
+            case ".": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.period,
+                        ".",
+                        ".",
+                        this.line,
+                        this.column
+                    )
+                );
+            }   
+
+            case "+": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.plus,
+                        "+",
+                        "+",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+
+            case "-": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.minus,
+                        "-",
+                        "-",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+
+            case "*": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.asterisk,
+                        "*",
+                        "*",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+
+            case "/": {
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.slash,
+                        "/",
+                        "/",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+
+            case "\n": {
+                this.line++;
+                this.column = 0;
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.newline,
+                        "\n",
+                        "\n",
+                        this.line,
+                        this.column
+                    )
+                );
+            }
+		}
+	}
+
 	//Run through all tokens until EOF is found
 	scanTokens() {
 		while (this.peek() !== "\0") this.scanToken();
