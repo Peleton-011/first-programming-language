@@ -268,6 +268,54 @@ export class Lexer {
 					new Token(TOKENS.Lt, "<", "<", this.line, this.column)
 				);
 			}
+
+			case "!": {
+				if (this.match("=")) {
+					return this.tokens.push(
+						new Token(
+							TOKENS.NotEquiv,
+							"!=",
+							"!=",
+							this.line,
+							this.column
+						)
+					);
+				}
+
+				return this.tokens.push(
+					new Token(TOKENS.Not, "!", "!", this.line, this.column)
+				);
+			}
+
+			case "=": {
+				if (this.match("=")) {
+					return this.tokens.push(
+						new Token(
+							TOKENS.Equiv,
+							"==",
+							"==",
+							this.line,
+							this.column
+						)
+					);
+				}
+
+				//Equals to assign??
+			}
+
+			case "&": {
+				if (this.match("&")) {
+					return this.tokens.push(
+						new Token(
+							TOKENS.And,
+							"&&",
+							"&&",
+							this.line,
+							this.column
+						)
+					);
+				}
+			}
 		}
 	}
 
