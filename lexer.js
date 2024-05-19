@@ -15,4 +15,18 @@ const getTokens = () => {
     }
 }
 
-getTokens()
+export const TOKENS = getTokens();
+
+export class Token {
+    constructor(type, value, content, line, column) {
+        this.type = type; //Should be a value in TOKENS  
+        this.value = value;
+        this.content = content;
+        this.line = line;
+        this.column = column;
+    }
+
+    toString() {
+        return this.value;
+    }
+}
