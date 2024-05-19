@@ -47,4 +47,11 @@ export class Lexer {
     error(msg ) {
         throw new EaselError(`Error on ${this.line}:${this.column}: ${msg}`);
     }
+
+    scanTokens() {
+        while(this.peek() !== "\0") this.scanToken();
+
+        this.tokens.push(new Token("EOF", null, null, this.line, this.column));
+        return this.tokens;
+    }
 }
