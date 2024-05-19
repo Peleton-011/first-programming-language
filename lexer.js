@@ -104,8 +104,9 @@ export class Lexer {
 	//Check if character is a letter
 	isLetter(char) {
 		return (
-			(char.toLowerCase() >= "a" && char.toLowerCase() <= "z") ||
-			(char >= "A" && char <= "Z")
+			(char >= "a" && char <= "z") ||
+			(char >= "A" && char <= "Z") ||
+			char === "_"
 		);
 	}
 
