@@ -44,7 +44,7 @@ const writeFile = (path, data) => {
 		} finally {
 			if (debug)
 				await writeFile(
-					"tokens.json",
+					"tokens_output.json",
 					JSON.stringify(lexer.tokens, null, 2)
 				);
 		}
