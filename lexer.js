@@ -1,5 +1,6 @@
 import fs from "fs";
 
+//Getting tokens from the JSON file
 const pathToTokens = "./tokens.json";
 const getTokens = () => {
     try {
@@ -17,6 +18,7 @@ const getTokens = () => {
 
 export const TOKENS = getTokens();
 
+//Token class
 export class Token {
     constructor(type, value, content, line, column) {
         this.type = type; //Should be a value in TOKENS  
