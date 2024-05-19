@@ -1,4 +1,5 @@
 import fs from "fs";
+import { EaselError } from "./stdlib";
 
 //Getting tokens from the JSON file
 const pathToTokens = "./tokens.json";
@@ -30,5 +31,20 @@ export class Token {
 
     toString() {
         return this.value;
+    }
+}
+
+//Lexer class
+export class Lexer {
+    constructor(code) {
+        this.code = code;
+        this.tokens = [];
+        this.current = 0;
+        this.line = 1;
+        this.column = 0;
+    }
+
+    error(msg ) {
+        throw new EaselError(`Error on ${this.line}:${this.column}: ${msg}`);
     }
 }
