@@ -96,6 +96,18 @@ export class Lexer {
 		return string.join("");
 	}
 
+    //Scan through a comment
+    scanComment() {
+        //Jump the comment symbol
+        this.advance()
+        let string = [];
+        
+        while (this.peek() !== "\n" || this.peek() !== "\0") {
+            string.push(this.advance());
+        }
+        return string.join("");
+    }
+
 	//Check if character is a digit
 	isDigit(char) {
 		return char >= "0" && char <= "9";
@@ -268,6 +280,26 @@ export class Lexer {
 					)
 				);
 			}
+
+            case " ":
+            case "\t":
+            case "\r": {
+                //Do nothing (for now)
+                return;0
+            }
+
+            case "~": {
+                const comment = this.scanComment();
+                return this.tokens.push(
+                    new Token(
+                        TOKENS.Comment,
+                        comment,
+                        comment,
+                        this.line,
+                        this.column
+                    )
+                );
+            }
 
 			case "'":
 			case `"`: {
