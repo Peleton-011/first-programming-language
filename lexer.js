@@ -19,6 +19,24 @@ const getTokens = () => {
 
 export const TOKENS = getTokens();
 
+//Getting keywords from the JSON file
+const pathToKeywords = "./keywords.json";
+const getKeywords = () => {
+	try {
+		// Step 1: Read the JSON file synchronously
+		const data = fs.readFileSync(pathToKeywords, "utf8");
+
+		// Step 2: Parse the JSON data
+		const jsonData = JSON.parse(data);
+		console.log("Parsed JSON data:", jsonData);
+		return jsonData;
+	} catch (err) {
+		console.error("Error:", err);
+	}
+};
+
+export const KEYWORDS = getKeywords();
+
 //Token class
 export class Token {
 	constructor(type, value, content, line, column) {
@@ -91,14 +109,17 @@ export class Lexer {
 		);
 	}
 
-    //Scan a number
-    scanNumber() {
-        let string = [];
-        while (this.isDigit(this.peek()) || (this.peek === "." && !string.includes("."))) {
-            string.push(this.advance());
-        }
-        return string.join("");
-    }
+	//Scan a number
+	scanNumber() {
+		let string = [];
+		while (
+			this.isDigit(this.peek()) ||
+			(this.peek === "." && !string.includes("."))
+		) {
+			string.push(this.advance());
+		}
+		return string.join("");
+	}
 
 	//Scan a single token
 	scanToken() {

@@ -1,0 +1,16 @@
+{
+	"prepare": "prepare",
+	"as": "as",
+	"brush": "brush",
+	"prep": "prep",
+	"has": "has",
+	"sketch": "sketch",
+	"needs": "needs",
+	"finished": "finished",
+	"loop": "loop",
+	"through": "through",
+	"while": "while",
+	"if": "if",
+	"elif": "elif",
+	"else": "else"
+}
