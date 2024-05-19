@@ -78,6 +78,28 @@ export class Lexer {
 		return string.join("");
 	}
 
+	//Check if character is a digit
+	isDigit(char) {
+		return char >= "0" && char <= "9";
+	}
+
+	//Check if character is a letter
+	isLetter(char) {
+		return (
+			(char.toLowerCase() >= "a" && char.toLowerCase() <= "z") ||
+			(char >= "A" && char <= "Z")
+		);
+	}
+
+    //Scan a number
+    scanNumber() {
+        let string = [];
+        while (this.isDigit(this.peek()) || (this.peek === "." && !string.includes("."))) {
+            string.push(this.advance());
+        }
+        return string.join("");
+    }
+
 	//Scan a single token
 	scanToken() {
 		let char = this.advance();
