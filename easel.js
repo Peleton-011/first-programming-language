@@ -1,4 +1,6 @@
 import fs from "fs";
+import { Lexer } from "./lexer.js";
+import { EaselError } from "./stdlib.js";
 
 const readFile = (path) => {
 	return new Promise((resolve, reject) => {
@@ -29,11 +31,24 @@ const writeFile = (path, data) => {
 	const debug = argv.includes("--debug");
 	argv = argv.filter((arg) => arg !== "--debug");
 
-    const path = argv[0];
-    if (path) {
-        const code = await readFile(path);
-        console.log(code);
-    } else {
-        console.log("No path provided");
-    }
+	const path = argv[0];
+	if (path) {
+		const code = await readFile(path);
+		console.log(code);
+		const lexer = new Lexer(code);
+		try {
+			lexer.scanTokens();
+		} catch (err) {
+			console.error(err);
+			process.exit(1);
+		} finally {
+			if (debug)
+				await writeFile(
+					"tokens.json",
+					JSON.stringify(lexer.tokens, null, 2)
+				);
+		}
+	} else {
+		console.log("No path provided");
+	}
 })();
