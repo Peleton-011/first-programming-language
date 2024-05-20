@@ -20,8 +20,18 @@ export class Variable {
 	}
 }
 
+export class BinaryExpression {
+    constructor(left, op, right) {
+        this.left = left;
+        this.operator = op;
+        this.right = right;
+        this.type = "BinaryExpression";
+    }
+}
+
 export default {
 	Literal,
 	Array,
 	Variable,
+    BinaryExpression
 };

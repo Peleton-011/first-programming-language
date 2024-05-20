@@ -2,6 +2,24 @@ import { EaselError } from "./stdlib";
 import { TOKENS } from "./lexer";
 import Ast from "./ast";
 
+const isOp = (type) => {
+	return [
+		TOKENS.Plus,
+		TOKENS.Minus,
+		TOKENS.Asterisk,
+		TOKENS.Slash,
+		TOKENS.Equiv,
+		TOKENS.NotEquiv,
+		TOKENS.Lt,
+		TOKENS.Lte,
+		TOKENS.Gt,
+		TOKENS.Gte,
+		TOKENS.And,
+		TOKENS.Or,
+		TOKENS.And,
+	].includes(type);
+};
+
 export class Parser {
 	constructor(tokens) {
 		this.tokens = tokens;
@@ -52,9 +70,9 @@ export class Parser {
 				return new Ast.Array(items);
 			}
 
-            case TOKENS.Identifier: {
-                return new Ast.Variable(token.value);
-            }
+			case TOKENS.Identifier: {
+				return new Ast.Variable(token.value);
+			}
 
 			default:
 				break;
@@ -65,6 +83,11 @@ export class Parser {
 
 	expression() {
 		const left = this.simple();
+		if (isOp(this.peekType())) {
+			const op = this.eat(this.peekType()).value;
+			const right = this.expression();
+			return new Ast.BinaryExpression(left, op, right);
+		}
 		return left;
 	}
 
