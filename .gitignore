@@ -129,4 +129,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-tokens_output.json
+*_output.json
