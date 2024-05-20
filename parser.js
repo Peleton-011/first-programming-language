@@ -1,4 +1,4 @@
-import { EaselError } from "./stdlib";
+import { EaselError } from "./stdlib.js";
 import { TOKENS } from "./lexer";
 import Ast from "./ast";
 
