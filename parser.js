@@ -20,6 +20,21 @@ const isOp = (type) => {
 	].includes(type);
 };
 
+const opOrder = {
+    "<": 0,
+    "<=": 0,
+    ">": 0,
+    ">=": 0,
+    "==": 0,
+    "!=": 0,
+    "||": 0,
+    "&&": 0,
+    "+": 1,
+    "-": 1,
+    "*": 2,
+    "/": 2,
+}
+
 export class Parser {
 	constructor(tokens) {
 		this.tokens = tokens.filter(
@@ -89,6 +104,14 @@ export class Parser {
 		if (isOp(this.peekType())) {
 			const op = this.eat(this.peekType()).value;
 			const right = this.expression();
+            if (right instanceof Ast.BinaryExpression && opOrder[op] > opOrder[right.operator]) {
+                //Reorder if needed
+                return new Ast.BinaryExpression(
+                    new Ast.BinaryExpression(left, op, right.left),
+                    right.operator,
+                    right.right
+                )
+            }
 			return new Ast.BinaryExpression(left, op, right);
 		}
 		return left;
