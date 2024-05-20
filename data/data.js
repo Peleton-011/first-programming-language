@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 //Getting tokens from the JSON file
-const pathToTokens = path.resolve(__dirname, "./tokens.json");
+const pathToTokens = process.cwd() + "/data/tokens.json"; //path.resolve(__dirname, "./tokens.json");
 const getTokens = () => {
 	try {
 		// Step 1: Read the JSON file synchronously
@@ -20,7 +20,7 @@ const getTokens = () => {
 export const TOKENS = getTokens();
 
 //Getting keywords from the JSON file
-const pathToKeywords = path.resolve(__dirname, "./keywords.json");
+const pathToKeywords = process.cwd() + "/data/keywords.json"; //path.resolve(__dirname, "./keywords.json");
 const getKeywords = () => {
 	try {
 		// Step 1: Read the JSON file synchronously
