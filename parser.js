@@ -139,14 +139,47 @@ export class Parser {
 	}
 
 	statement() {
+
+        const functionStatement = () => {
+            this.eatKeyword("sketch");
+            const name = this.eat(TOKENS.Identifier).value;
+
+            let params = [];
+
+            if (this.peekKeyword("needs")){
+                //Params
+                this.eatKeyword("needs");
+                this.eat(TOKENS.LeftParen);
+                params = this.identifierList();
+                this.eat(TOKENS.RightParen);
+            }
+
+            this.eat(TOKENS.LeftBrace);
+            let body = [];
+
+            while (this.peekType() !== TOKENS.RightBrace) {
+                body.push(this.statement());
+            }
+
+            this.eat(TOKENS.RightBrace);
+
+            return new Ast.FunctionStatement(name, params, body);
+        }
+
 		const next = this.peek();
 
 		switch (next.type) {
-			case TOKENS.Identifier:
-				return this.expression();
+			case TOKENS.Keyword:{
+                switch(next.value){
+                    case "sketch": {
+                        return functionStatement();
+                    }
+                }
+            }
 
-			default:
-				return this.expression();
+            default: {
+                return this.expression();
+            }
 		}
 	}
 
