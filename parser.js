@@ -44,12 +44,13 @@ export class Parser {
 				return new Ast.Literal(token.content);
 			}
 
-            case TOKENS.LeftBracket: {
-                let items = [];
-                if(this.peekType() !== TOKENS.RightBracket) items = this.expressionList() ;
-                this.eat(TOKENS.RightBracket);
-                return new Ast.Array(items);
-            }
+			case TOKENS.LeftBracket: {
+				let items = [];
+				if (this.peekType() !== TOKENS.RightBracket)
+					items = this.expressionList();
+				this.eat(TOKENS.RightBracket);
+				return new Ast.Array(items);
+			}
 
 			default:
 				break;
@@ -61,6 +62,18 @@ export class Parser {
 	expression() {
 		const left = this.simple();
 		return left;
+	}
+
+	expressionList() {
+		let expressions = [];
+		expressions.push(this.expression());
+
+		while (this.peekType() === TOKENS.Comma) {
+			this.eat(TOKENS.Comma);
+			expressions.push(this.expression());
+		}
+
+		return expressions;
 	}
 
 	statement() {
