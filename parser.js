@@ -22,7 +22,10 @@ const isOp = (type) => {
 
 export class Parser {
 	constructor(tokens) {
-		this.tokens = tokens;
+		this.tokens = tokens.filter(
+			(token) =>
+				token.type !== TOKENS.Comment && token.type !== TOKENS.newLine
+		);
 		this.ast = []; //Abstract syntax tree
 		this.current = 0;
 	}

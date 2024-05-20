@@ -272,7 +272,7 @@ export class Lexer {
 				this.column = 0;
 				return this.tokens.push(
 					new Token(
-						TOKENS.newline,
+						TOKENS.newLine,
 						"\n",
 						"\n",
 						this.line,
