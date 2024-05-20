@@ -116,7 +116,7 @@ export class Parser {
 	}
 
 	parse() {
-		while (this.peekType() !== "EOF") continue;
+		while (this.peekType() !== "EOF") this.ast.push(this.statement());
 		return this.ast;
 	}
 }
