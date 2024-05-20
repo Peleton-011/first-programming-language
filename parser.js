@@ -1,5 +1,6 @@
 import { EaselError } from "./stdlib";
 import { TOKENS } from "./lexer";
+import Ast from "./ast";
 
 export class Parser {
 	constructor(tokens) {
