@@ -1,38 +1,9 @@
-import { EaselError } from "./stdlib.js";
-import { TOKENS } from "./lexer.js";
-import Ast from "./ast.js";
+import { EaselError } from "../stdlib.js";
+import { TOKENS, OP_LIST, OP_ORDER } from "./lexer.js";
+import Ast from "../AST/ast.js";
 
 const isOp = (type) => {
-	return [
-		TOKENS.Plus,
-		TOKENS.Minus,
-		TOKENS.Asterisk,
-		TOKENS.Slash,
-		TOKENS.Equiv,
-		TOKENS.NotEquiv,
-		TOKENS.Lt,
-		TOKENS.Lte,
-		TOKENS.Gt,
-		TOKENS.Gte,
-		TOKENS.And,
-		TOKENS.Or,
-		TOKENS.And,
-	].includes(type);
-};
-
-const opOrder = {
-	"<": 0,
-	"<=": 0,
-	">": 0,
-	">=": 0,
-	"==": 0,
-	"!=": 0,
-	"||": 0,
-	"&&": 0,
-	"+": 1,
-	"-": 1,
-	"*": 2,
-	"/": 2,
+	return OP_LIST.includes(type);
 };
 
 export class Parser {
@@ -112,7 +83,7 @@ export class Parser {
 			const right = this.expression();
 			if (
 				right instanceof Ast.BinaryExpression &&
-				opOrder[op] > opOrder[right.operator]
+				OP_ORDER[op] > OP_ORDER[right.operator]
 			) {
 				//Reorder if needed
 				return new Ast.BinaryExpression(

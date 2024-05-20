@@ -1,7 +1,7 @@
 import fs from "fs";
-import { Lexer } from "./lexer.js";
-import { Parser } from "./parser.js";
-import { EaselError } from "./stdlib.js";
+import { Lexer } from "./src/components/lexer.js";
+import { Parser } from "./src/components/parser.js";
+import { EaselError } from "./src/stdlib.js";
 
 const readFile = (path) => {
 	return new Promise((resolve, reject) => {
@@ -45,7 +45,7 @@ const writeFile = (path, data) => {
 		} finally {
 			if (debug)
 				await writeFile(
-					"tokens_output.json",
+					"./debug/tokens_output.json",
 					JSON.stringify(lexer.tokens, null, 2)
 				);
 		}
@@ -59,7 +59,7 @@ const writeFile = (path, data) => {
 		} finally {
 			if (debug)
 				await writeFile(
-					"ast_output.json",
+					"./debug/ast_output.json",
 					JSON.stringify(parser.ast, null, 2)
 				);
 		}

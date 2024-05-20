@@ -1,41 +1,5 @@
-import fs from "fs";
-import { EaselError } from "./stdlib.js";
-
-//Getting tokens from the JSON file
-const pathToTokens = "./tokens.json";
-const getTokens = () => {
-	try {
-		// Step 1: Read the JSON file synchronously
-		const data = fs.readFileSync(pathToTokens, "utf8");
-
-		// Step 2: Parse the JSON data
-		const jsonData = JSON.parse(data);
-		console.log("Parsed JSON data:", jsonData);
-		return jsonData;
-	} catch (err) {
-		console.error("Error:", err);
-	}
-};
-
-export const TOKENS = getTokens();
-
-//Getting keywords from the JSON file
-const pathToKeywords = "./keywords.json";
-const getKeywords = () => {
-	try {
-		// Step 1: Read the JSON file synchronously
-		const data = fs.readFileSync(pathToKeywords, "utf8");
-
-		// Step 2: Parse the JSON data
-		const jsonData = JSON.parse(data);
-		console.log("Parsed JSON data:", jsonData);
-		return jsonData;
-	} catch (err) {
-		console.error("Error:", err);
-	}
-};
-
-export const KEYWORDS = getKeywords();
+import { EaselError } from "../stdlib.js";
+import { TOKENS, KEYWORDS } from "../../data/data.js";
 
 //Token class
 export class Token {
