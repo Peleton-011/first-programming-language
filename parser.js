@@ -44,6 +44,13 @@ export class Parser {
 				return new Ast.Literal(token.content);
 			}
 
+            case TOKENS.LeftBracket: {
+                let items = [];
+                if(this.peekType() !== TOKENS.RightBracket) items = this.expressionList() ;
+                this.eat(TOKENS.RightBracket);
+                return new Ast.Array(items);
+            }
+
 			default:
 				break;
 		}
