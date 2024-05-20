@@ -21,19 +21,19 @@ const isOp = (type) => {
 };
 
 const opOrder = {
-    "<": 0,
-    "<=": 0,
-    ">": 0,
-    ">=": 0,
-    "==": 0,
-    "!=": 0,
-    "||": 0,
-    "&&": 0,
-    "+": 1,
-    "-": 1,
-    "*": 2,
-    "/": 2,
-}
+	"<": 0,
+	"<=": 0,
+	">": 0,
+	">=": 0,
+	"==": 0,
+	"!=": 0,
+	"||": 0,
+	"&&": 0,
+	"+": 1,
+	"-": 1,
+	"*": 2,
+	"/": 2,
+};
 
 export class Parser {
 	constructor(tokens) {
@@ -88,6 +88,12 @@ export class Parser {
 				return new Ast.Array(items);
 			}
 
+			case TOKENS.LeftParen: {
+				const innerExpression = this.expression();
+				this.eat(TOKENS.RightParen);
+				return innerExpression;
+			}
+
 			case TOKENS.Identifier: {
 				return new Ast.Variable(token.value);
 			}
@@ -104,14 +110,17 @@ export class Parser {
 		if (isOp(this.peekType())) {
 			const op = this.eat(this.peekType()).value;
 			const right = this.expression();
-            if (right instanceof Ast.BinaryExpression && opOrder[op] > opOrder[right.operator]) {
-                //Reorder if needed
-                return new Ast.BinaryExpression(
-                    new Ast.BinaryExpression(left, op, right.left),
-                    right.operator,
-                    right.right
-                )
-            }
+			if (
+				right instanceof Ast.BinaryExpression &&
+				opOrder[op] > opOrder[right.operator]
+			) {
+				//Reorder if needed
+				return new Ast.BinaryExpression(
+					new Ast.BinaryExpression(left, op, right.left),
+					right.operator,
+					right.right
+				);
+			}
 			return new Ast.BinaryExpression(left, op, right);
 		}
 		return left;
