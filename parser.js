@@ -1,5 +1,5 @@
 import { EaselError } from "./stdlib.js";
-import { TOKENS } from "./lexer";
+import { TOKENS } from "./lexer.js";
 import Ast from "./ast";
 
 const isOp = (type) => {
