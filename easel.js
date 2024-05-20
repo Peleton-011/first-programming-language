@@ -1,5 +1,6 @@
 import fs from "fs";
 import { Lexer } from "./lexer.js";
+import { Parser } from "./parser.js";
 import { EaselError } from "./stdlib.js";
 
 const readFile = (path) => {
@@ -46,6 +47,20 @@ const writeFile = (path, data) => {
 				await writeFile(
 					"tokens_output.json",
 					JSON.stringify(lexer.tokens, null, 2)
+				);
+		}
+
+		const parser = new Parser(lexer.tokens);
+		try {
+			parser.parse();
+		} catch (err) {
+			console.error(err);
+			process.exit(1);
+		} finally {
+			if (debug)
+				await writeFile(
+					"ast_output.json",
+					JSON.stringify(parser.ast, null, 2)
 				);
 		}
 	} else {
