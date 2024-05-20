@@ -35,7 +35,19 @@ export class Parser {
 	}
 
 	simple() {
-		return this.eat(TOKENS.Identifier);
+		const token = this.eat(this.peekType());
+		switch (token.type) {
+			case TOKENS.String:
+			case TOKENS.Number:
+			case TOKENS.Boolean: {
+				return new Ast.Literal(token.content);
+			}
+
+			default:
+				break;
+		}
+
+		this.error(token, "Expected expression but got " + token);
 	}
 
 	expression() {
