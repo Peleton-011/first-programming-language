@@ -52,6 +52,10 @@ export class Parser {
 				return new Ast.Array(items);
 			}
 
+            case TOKENS.Identifier: {
+                return new Ast.Variable(token.value);
+            }
+
 			default:
 				break;
 		}

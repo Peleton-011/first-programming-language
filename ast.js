@@ -12,7 +12,16 @@ export class Array {
 	}
 }
 
+export class Variable {
+	constructor(name, value) {
+		this.value = value;
+		this.name = name;
+		this.type = "Variable";
+	}
+}
+
 export default {
 	Literal,
 	Array,
+	Variable,
 };
