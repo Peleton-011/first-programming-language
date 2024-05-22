@@ -38,10 +38,18 @@ export class FunctionStatement {
     }
 }
 
+export class ReturnStatement {
+    constructor(value) {
+        this.value = value;
+        this.type = "ReturnStatement";
+    }
+}
+
 export default {
 	Literal,
 	Array,
 	Variable,
     BinaryExpression,
-    FunctionStatement
+    FunctionStatement,
+    ReturnStatement
 };

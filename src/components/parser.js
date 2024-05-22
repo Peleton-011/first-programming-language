@@ -174,6 +174,12 @@ export class Parser {
 			return new Ast.FunctionStatement(name, params, body);
 		};
 
+        const returnStatement = () => {
+            this.eatKeyword("finished");
+            const value = this.expression();
+            return new Ast.ReturnStatement(value);
+        };
+
 		const next = this.peek();
 
 		switch (next.type) {
@@ -182,6 +188,10 @@ export class Parser {
 					case "sketch": {
 						return functionStatement();
 					}
+
+                    case "finished": {
+                        return returnStatement();
+                    }
 				}
 			}
 
