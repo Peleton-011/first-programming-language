@@ -135,6 +135,18 @@ export class Parser {
 		return expressions;
 	}
 
+	identifierList() {
+		let identifiers = [];
+		identifiers.push(this.eat(TOKENS.Identifier).value);
+
+		while (this.peekType() === TOKENS.Comma) {
+			this.eat(TOKENS.Comma);
+			identifiers.push(this.eat(TOKENS.Identifier).value);
+		}
+
+		return identifiers;
+	}
+
 	statement() {
 		const functionStatement = () => {
 			this.eatKeyword("sketch");
