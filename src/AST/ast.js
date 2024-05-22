@@ -29,9 +29,19 @@ export class BinaryExpression {
     }
 }
 
+export class FunctionStatement {
+    constructor(name, params, body) {
+        this.name = name;
+        this.params = params;
+        this.body = body;
+        this.type = "FunctionStatement";
+    }
+}
+
 export default {
 	Literal,
 	Array,
 	Variable,
-    BinaryExpression
+    BinaryExpression,
+    FunctionStatement
 };
