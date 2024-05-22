@@ -42,6 +42,32 @@ export class Parser {
 		);
 	}
 
+	peekKeyword(keyword) {
+		if (
+			this.peekType() === TOKENS.Keyword ||
+			this.peek().value === keyword
+		) {
+			return this.peek();
+		}
+		return null;
+	}
+
+	eatKeyword(keyword) {
+		if (this.peekType() !== TOKENS.Keyword) {
+			this.error(
+				this.peek(),
+				"Expected keyword but got " + this.peekType()
+			);
+		} else if (this.peek().value !== keyword) {
+			this.error(
+				this.peek(),
+				"Expected " + keyword + " but got " + this.peek().value
+			);
+		} else {
+			return this.eat(TOKENS.Keyword);
+		}
+	}
+
 	simple() {
 		const token = this.eat(this.peekType());
 		switch (token.type) {
@@ -110,47 +136,46 @@ export class Parser {
 	}
 
 	statement() {
+		const functionStatement = () => {
+			this.eatKeyword("sketch");
+			const name = this.eat(TOKENS.Identifier).value;
 
-        const functionStatement = () => {
-            this.eatKeyword("sketch");
-            const name = this.eat(TOKENS.Identifier).value;
+			let params = [];
 
-            let params = [];
+			if (this.peekKeyword("needs")) {
+				//Params
+				this.eatKeyword("needs");
+				this.eat(TOKENS.LeftParen);
+				params = this.identifierList();
+				this.eat(TOKENS.RightParen);
+			}
 
-            if (this.peekKeyword("needs")){
-                //Params
-                this.eatKeyword("needs");
-                this.eat(TOKENS.LeftParen);
-                params = this.identifierList();
-                this.eat(TOKENS.RightParen);
-            }
+			this.eat(TOKENS.LeftBrace);
+			let body = [];
 
-            this.eat(TOKENS.LeftBrace);
-            let body = [];
+			while (this.peekType() !== TOKENS.RightBrace) {
+				body.push(this.statement());
+			}
 
-            while (this.peekType() !== TOKENS.RightBrace) {
-                body.push(this.statement());
-            }
+			this.eat(TOKENS.RightBrace);
 
-            this.eat(TOKENS.RightBrace);
-
-            return new Ast.FunctionStatement(name, params, body);
-        }
+			return new Ast.FunctionStatement(name, params, body);
+		};
 
 		const next = this.peek();
 
 		switch (next.type) {
-			case TOKENS.Keyword:{
-                switch(next.value){
-                    case "sketch": {
-                        return functionStatement();
-                    }
-                }
-            }
+			case TOKENS.Keyword: {
+				switch (next.value) {
+					case "sketch": {
+						return functionStatement();
+					}
+				}
+			}
 
-            default: {
-                return this.expression();
-            }
+			default: {
+				return this.expression();
+			}
 		}
 	}
 
