@@ -2,9 +2,9 @@
 2006 / 4012 + 2
 
 sketch functy needs ( pa, ra, ms) {
-    finished 4 + 5
-}
-
-loop i through (0, 10) {
-    i + 10
+    loop i through (0, 10) {
+        while ( a > 7) {
+            finished i + 10
+        }
+    }
 }
