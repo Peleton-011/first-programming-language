@@ -180,6 +180,32 @@ export class Parser {
             return new Ast.ReturnStatement(value);
         };
 
+        const forStatement = () => {
+            this.eatKeyword("loop");
+            const name = this.eat(TOKENS.Identifier).value;
+            this.eatKeyword("through");
+
+            //Get range
+            this.eat(TOKENS.LeftParen);
+            const range = this.expressionList();
+
+            if(range.length !== 2) {
+                this.error(range[0], "Expected 2 values in range, (start, end), recieved: " + range.join(", "));
+            }
+
+            this.eat(TOKENS.RightParen);
+
+            //Get body
+            this.eat(TOKENS.LeftBrace);
+            const body =  []
+            while (this.peekType() !== TOKENS.RightBrace) {
+                body.push(this.statement());
+            }
+            this.eat(TOKENS.RightBrace);
+
+            return new Ast.ForStatement(name, range, body);
+        };
+
 		const next = this.peek();
 
 		switch (next.type) {
@@ -191,6 +217,10 @@ export class Parser {
 
                     case "finished": {
                         return returnStatement();
+                    }
+
+                    case "loop": {
+                        return forStatement();
                     }
 				}
 			}
