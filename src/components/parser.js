@@ -206,6 +206,25 @@ export class Parser {
             return new Ast.ForStatement(name, range, body);
         };
 
+        const whileStatement = () => {
+            this.eatKeyword("while");
+
+            //Get condition
+            this.eat(TOKENS.LeftParen);
+            const condition = this.expression();
+            this.eat(TOKENS.RightParen);
+        
+            //Get body
+            this.eat(TOKENS.LeftBrace);
+            const body =  []
+            while (this.peekType() !== TOKENS.RightBrace) {
+                body.push(this.statement());
+            }
+            this.eat(TOKENS.RightBrace);
+        
+            return new Ast.WhileStatement(condition, body);
+        };
+
 		const next = this.peek();
 
 		switch (next.type) {
@@ -221,6 +240,10 @@ export class Parser {
 
                     case "loop": {
                         return forStatement();
+                    }
+
+                    case "while": {
+                        return whileStatement();
                     }
 				}
 			}
