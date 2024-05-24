@@ -275,6 +275,19 @@ export class Parser {
 			return new Ast.Variable(name, value);
 		};
 
+		const structStatement = () => {
+			this.eatKeyword("brush");
+
+			const name = this.eat(TOKENS.Identifier).value;
+			this.eatKeyword("has");
+
+			this.eat(TOKENS.LeftBrace);
+			const members = this.identifierList();
+			this.eat(TOKENS.RightBrace);
+
+			return new Ast.StructureStatement(name, members);
+		};
+
 		const next = this.peek();
 
 		switch (next.type) {
@@ -302,6 +315,10 @@ export class Parser {
 
 					case "prepare": {
 						return assignmentStatement();
+					}
+
+					case "brush": {
+						return structStatement();
 					}
 				}
 			}

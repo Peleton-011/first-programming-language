@@ -20,13 +20,13 @@ export class Variable {
 	}
 }
 
-export class Set { 
-    constructor(name, property, value) {
-        this.name = name;
-        this.property = property;
-        this.value = value;
-        this.type = "Set";
-    }
+export class Set {
+	constructor(name, property, value) {
+		this.name = name;
+		this.property = property;
+		this.value = value;
+		this.type = "Set";
+	}
 }
 
 export class BinaryExpression {
@@ -80,15 +80,24 @@ export class ConditionalStatement {
 	}
 }
 
+export class structStatement {
+	constructor(name, members) {
+		this.name = name;
+		this.members = members;
+		this.type = "structStatement";
+	}
+}
+
 export default {
 	Literal,
 	Array,
 	Variable,
-    Set,
+	Set,
 	BinaryExpression,
 	FunctionStatement,
 	ReturnStatement,
 	ForStatement,
 	WhileStatement,
 	ConditionalStatement,
+	structStatement,
 };
