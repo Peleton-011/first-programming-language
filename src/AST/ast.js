@@ -46,6 +46,14 @@ export class Call {
 	}
 }
 
+export class UnaryExpression {
+	constructor(operator, value) {
+		this.operator = operator;
+		this.value = value;
+		this.type = "UnaryExpression";
+	}
+}
+
 export class BinaryExpression {
 	constructor(left, op, right) {
 		this.left = left;
@@ -118,6 +126,9 @@ export default {
 	Array,
 	Variable,
 	Set,
+	Get,
+	Call,
+	UnaryExpression,
 	BinaryExpression,
 	FunctionStatement,
 	ReturnStatement,

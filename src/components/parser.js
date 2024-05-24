@@ -160,8 +160,17 @@ export class Parser {
 		return expression;
 	}
 
+	unary() {
+		if (this.peekType() === TOKENS.Not) {
+			const op = this.eat(this.peekType()).value;
+			return new Ast.UnaryExpression(op, this.unary());
+		}
+
+		return this.call();
+	}
+
 	expression() {
-		const left = this.call();
+		const left = this.unary();
 		if (isOp(this.peekType())) {
 			const op = this.eat(this.peekType()).value;
 			const right = this.expression();
