@@ -126,8 +126,42 @@ export class Parser {
 		this.error(token, "Expected expression but got " + token);
 	}
 
+	call() {
+		let expression = this.simple();
+		while (true) {
+			if (this.peekType() === TOKENS.LeftParen) {
+				//Function call
+				this.eat(TOKENS.LeftParen);
+				let args = [];
+				if (this.peekType() !== TOKENS.RightParen) {
+					args = this.expressionList();
+				}
+				this.eat(TOKENS.RightParen);
+
+				expression = new Ast.Call(expression, args);
+			} else if (this.peekType() === TOKENS.LeftBracket) {
+				//Struct access
+				this.eat(TOKENS.LeftBracket);
+				const property = this.expression();
+				this.eat(TOKENS.RightBracket);
+
+				expression = new Ast.Get(expression, property, true);
+			} else if (this.peekType() === TOKENS.Period) {
+				//Property access
+				this.eat(TOKENS.Period);
+				const property = this.eat(TOKENS.Identifier).value;
+
+				expression = new Ast.Get(expression, property);
+			} else {
+				break;
+			}
+		}
+
+		return expression;
+	}
+
 	expression() {
-		const left = this.simple();
+		const left = this.call();
 		if (isOp(this.peekType())) {
 			const op = this.eat(this.peekType()).value;
 			const right = this.expression();
@@ -309,7 +343,7 @@ export class Parser {
 			const members = this.identifierList();
 			this.eat(TOKENS.RightBrace);
 
-			return new Ast.StructureStatement(name, members);
+			return new Ast.StructStatement(name, members);
 		};
 
 		const next = this.peek();

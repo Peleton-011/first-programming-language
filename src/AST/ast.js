@@ -29,6 +29,23 @@ export class Set {
 	}
 }
 
+export class Get {
+	constructor(caller, property, isExpression) {
+		this.caller = caller;
+		this.property = property;
+		this.isExpression = isExpression;
+		this.type = "Get";
+	}
+}
+
+export class Call {
+	constructor(caller, args) {
+		this.caller = caller;
+		this.args = args;
+		this.type = "Call";
+	}
+}
+
 export class BinaryExpression {
 	constructor(left, op, right) {
 		this.left = left;
@@ -80,11 +97,11 @@ export class ConditionalStatement {
 	}
 }
 
-export class structStatement {
+export class StructStatement {
 	constructor(name, members) {
 		this.name = name;
 		this.members = members;
-		this.type = "structStatement";
+		this.type = "StructStatement";
 	}
 }
 
@@ -107,6 +124,6 @@ export default {
 	ForStatement,
 	WhileStatement,
 	ConditionalStatement,
-	structStatement,
+	StructStatement,
 	Instance,
 };
