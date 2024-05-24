@@ -88,6 +88,14 @@ export class structStatement {
 	}
 }
 
+export class Instance {
+	constructor(name, members) {
+		this.name = name;
+		this.members = members;
+		this.type = "Instance";
+	}
+}
+
 export default {
 	Literal,
 	Array,
@@ -100,4 +108,5 @@ export default {
 	WhileStatement,
 	ConditionalStatement,
 	structStatement,
+	Instance,
 };

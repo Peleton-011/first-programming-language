@@ -95,6 +95,30 @@ export class Parser {
 				return new Ast.Variable(token.value);
 			}
 
+			case TOKENS.Keyword: {
+				if (token.value === "prep") {
+					//instance is a struct copy
+					const id = this.eat(TOKENS.Identifier).value;
+
+					this.eat(TOKENS.LeftParen);
+					const members = {};
+
+					while (this.peekType() !== TOKENS.RightParen) {
+						const member = this.eat(TOKENS.Identifier).value;
+						this.eat(TOKENS.Colon);
+						members[member] = this.expression();
+
+						if (this.peekType() === TOKENS.Comma) {
+							this.eat(TOKENS.Comma);
+						}
+					}
+
+					this.eat(TOKENS.RightParen);
+
+					return new Ast.Instance(id, members);
+				}
+				break;
+			}
 			default:
 				break;
 		}
