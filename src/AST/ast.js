@@ -20,6 +20,15 @@ export class Variable {
 	}
 }
 
+export class Set { 
+    constructor(name, property, value) {
+        this.name = name;
+        this.property = property;
+        this.value = value;
+        this.type = "Set";
+    }
+}
+
 export class BinaryExpression {
 	constructor(left, op, right) {
 		this.left = left;
@@ -75,6 +84,7 @@ export default {
 	Literal,
 	Array,
 	Variable,
+    Set,
 	BinaryExpression,
 	FunctionStatement,
 	ReturnStatement,

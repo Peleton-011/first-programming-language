@@ -257,6 +257,24 @@ export class Parser {
 			return new Ast.ConditionalStatement(condition, body, otherwise);
 		};
 
+		const assignmentStatement = () => {
+			this.eatKeyword("prepare");
+			const name = this.eat(TOKENS.Identifier).value;
+
+			if (this.peekType() === TOKENS.Period) {
+				//Setter
+				this.eat(TOKENS.Period);
+				const property = this.eat(TOKENS.Identifier).value;
+				this.eatKeyword("as");
+				const value = this.expression();
+				return new Ast.SetStatement(name, property, value);
+			}
+
+			this.eatKeyword("as");
+			const value = this.expression();
+			return new Ast.Variable(name, value);
+		};
+
 		const next = this.peek();
 
 		switch (next.type) {
@@ -280,6 +298,10 @@ export class Parser {
 
 					case "if": {
 						return conditionalStatement("if");
+					}
+
+					case "prepare": {
+						return assignmentStatement();
 					}
 				}
 			}
