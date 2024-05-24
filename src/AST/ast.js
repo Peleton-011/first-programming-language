@@ -62,6 +62,15 @@ export class WhileStatement {
 	}
 }
 
+export class ConditionalStatement {
+	constructor(condition, body, otherwise) {
+		this.condition = condition;
+		this.body = body;
+		this.otherwise = otherwise;
+		this.type = "ConditionalStatement";
+	}
+}
+
 export default {
 	Literal,
 	Array,
@@ -71,4 +80,5 @@ export default {
 	ReturnStatement,
 	ForStatement,
 	WhileStatement,
+	ConditionalStatement,
 };

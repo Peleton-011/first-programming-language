@@ -174,56 +174,88 @@ export class Parser {
 			return new Ast.FunctionStatement(name, params, body);
 		};
 
-        const returnStatement = () => {
-            this.eatKeyword("finished");
-            const value = this.expression();
-            return new Ast.ReturnStatement(value);
-        };
+		const returnStatement = () => {
+			this.eatKeyword("finished");
+			const value = this.expression();
+			return new Ast.ReturnStatement(value);
+		};
 
-        const forStatement = () => {
-            this.eatKeyword("loop");
-            const name = this.eat(TOKENS.Identifier).value;
-            this.eatKeyword("through");
+		const forStatement = () => {
+			this.eatKeyword("loop");
+			const name = this.eat(TOKENS.Identifier).value;
+			this.eatKeyword("through");
 
-            //Get range
-            this.eat(TOKENS.LeftParen);
-            const range = this.expressionList();
+			//Get range
+			this.eat(TOKENS.LeftParen);
+			const range = this.expressionList();
 
-            if(range.length !== 2) {
-                this.error(range[0], "Expected 2 values in range, (start, end), recieved: " + range.join(", "));
-            }
+			if (range.length !== 2) {
+				this.error(
+					range[0],
+					"Expected 2 values in range, (start, end), recieved: " +
+						range.join(", ")
+				);
+			}
 
-            this.eat(TOKENS.RightParen);
+			this.eat(TOKENS.RightParen);
 
-            //Get body
-            this.eat(TOKENS.LeftBrace);
-            const body =  []
-            while (this.peekType() !== TOKENS.RightBrace) {
-                body.push(this.statement());
-            }
-            this.eat(TOKENS.RightBrace);
+			//Get body
+			this.eat(TOKENS.LeftBrace);
+			const body = [];
+			while (this.peekType() !== TOKENS.RightBrace) {
+				body.push(this.statement());
+			}
+			this.eat(TOKENS.RightBrace);
 
-            return new Ast.ForStatement(name, range, body);
-        };
+			return new Ast.ForStatement(name, range, body);
+		};
 
-        const whileStatement = () => {
-            this.eatKeyword("while");
+		const whileStatement = () => {
+			this.eatKeyword("while");
 
-            //Get condition
-            this.eat(TOKENS.LeftParen);
-            const condition = this.expression();
-            this.eat(TOKENS.RightParen);
-        
-            //Get body
-            this.eat(TOKENS.LeftBrace);
-            const body =  []
-            while (this.peekType() !== TOKENS.RightBrace) {
-                body.push(this.statement());
-            }
-            this.eat(TOKENS.RightBrace);
-        
-            return new Ast.WhileStatement(condition, body);
-        };
+			//Get condition
+			this.eat(TOKENS.LeftParen);
+			const condition = this.expression();
+			this.eat(TOKENS.RightParen);
+
+			//Get body
+			this.eat(TOKENS.LeftBrace);
+			const body = [];
+			while (this.peekType() !== TOKENS.RightBrace) {
+				body.push(this.statement());
+			}
+			this.eat(TOKENS.RightBrace);
+
+			return new Ast.WhileStatement(condition, body);
+		};
+
+		const conditionalStatement = (keyword) => {
+			this.eatKeyword(keyword);
+
+			//Get condition
+			let condition = new Ast.Literal(true);
+			if (keyword !== "else") {
+				this.eat(TOKENS.LeftParen);
+				condition = this.expression();
+				this.eat(TOKENS.RightParen);
+			}
+
+			//Get body
+			this.eat(TOKENS.LeftBrace);
+			const body = [];
+			while (this.peekType() !== TOKENS.RightBrace) {
+				body.push(this.statement());
+			}
+			this.eat(TOKENS.RightBrace);
+
+			//Get else
+			let otherwise = [];
+			while (this.peekKeyword("else") || this.peekKeyword("elif")) {
+				otherwise.push(this.conditionalStatement(this.peek().value));
+			}
+
+			return new Ast.ConditionalStatement(condition, body, otherwise);
+		};
 
 		const next = this.peek();
 
@@ -234,17 +266,21 @@ export class Parser {
 						return functionStatement();
 					}
 
-                    case "finished": {
-                        return returnStatement();
-                    }
+					case "finished": {
+						return returnStatement();
+					}
 
-                    case "loop": {
-                        return forStatement();
-                    }
+					case "loop": {
+						return forStatement();
+					}
 
-                    case "while": {
-                        return whileStatement();
-                    }
+					case "while": {
+						return whileStatement();
+					}
+
+					case "if": {
+						return conditionalStatement("if");
+					}
 				}
 			}
 
