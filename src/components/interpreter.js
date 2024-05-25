@@ -8,6 +8,14 @@ export class ReturnException extends Error {
 	}
 }
 
+Array.prototype.add = function (args) {
+    this.push(...args);
+}
+
+Array.prototype.get = function([index]) {
+    return this[index];
+}
+
 export default class Interpreter {
 	error(msg) {
 		throw new EaselError(`Runtime error: ${msg}`);
