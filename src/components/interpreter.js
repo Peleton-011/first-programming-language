@@ -47,6 +47,18 @@ export default class Interpreter {
 					this.evaluate(value.right, scope)
 				);
 			}
+			case Ast.Literal: {
+				return value.value;
+			}
+			case Ast.Array: {
+				return value.value.map((item) => this.evaluate(item, scope));
+			}
+			default: {
+				this.error(
+					"Expected expression but got statement: " +
+						value.constructor.name
+				);
+			}
 		}
 	}
 
