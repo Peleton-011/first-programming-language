@@ -1,4 +1,4 @@
-import Ast from "../AST/ast";
+import Ast from "../AST/ast.js";
 import { EaselError } from "../stdlib.js";
 
 export class ReturnException extends Error {

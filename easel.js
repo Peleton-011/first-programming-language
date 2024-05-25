@@ -1,8 +1,8 @@
 import fs from "fs";
 import { Lexer } from "./src/components/lexer.js";
 import { Parser } from "./src/components/parser.js";
-import { Interpreter } from "./src/components/interpreter.js";
-import { EaselError } from "./src/stdlib.js";
+import Interpreter  from "./src/components/interpreter.js";
+import stdlib, { EaselError } from "./src/stdlib.js";
 
 const readFile = (path) => {
 	return new Promise((resolve, reject) => {
@@ -71,17 +71,18 @@ const writeFile = (path, data) => {
 		//Interpret
 		const interpreter = new Interpreter();
 		try {
-			interpreter.run(parser.ast);
+			interpreter.run(parser.ast, stdlib);
 		} catch (err) {
 			console.error(err);
 			process.exit(1);
-		} finally {
+		} 
+        /* finally {
 			if (debug)
 				await writeFile(
 					"./debug/interpreter_output.json",
 					JSON.stringify(interpreter.memory, null, 2)
 				);
-		}
+		} */
 	} else {
 		console.log("No path provided");
 	}

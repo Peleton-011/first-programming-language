@@ -1,10 +1,5 @@
 [4 + 21, 5, 27, 89]
 2006 / 4012 + 2
 
-sketch functy needs ( pa, ra, ms) {
-    loop i through (0, 10) {
-        while ( a > 7) {
-            finished i + 10
-        }
-    }
-}
+ink("Hello worlde!")
+ink(round(random(0, 100)))
