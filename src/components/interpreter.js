@@ -13,7 +13,12 @@ export default class Interpreter {
 		throw new EaselError(`Runtime error: ${msg}`);
 	}
 
-	run(ast, scope) {}
+	run(ast, scope) {
+		for (const node of ast) {
+			this.execute(node, scope);
+		}
+		return scope;
+	}
 
 	inScope(scope, name) {
 		return Object.keys(scope).includes(name);
