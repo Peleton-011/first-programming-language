@@ -99,8 +99,29 @@ export default class Interpreter {
 				};
 				return scope;
 			}
-			case Ast.FunctionStatement:
+			case Ast.FunctionStatement: {
+				const func = (args) => {
+					const localScope = { ...scope };
+					for (const [i, parameter] of node.params.entries()) {
+						localScope[parameter] = args[i];
+					}
+
+					try {
+						this.run(node.body, localScope);
+					} catch (error) {
+						if (error instanceof ReturnException) {
+							return error.value;
+						} else {
+							throw error;
+						}
+					}
+				};
+
+				scope[node.name] = func;
+				return scope;
+			}
 			case Ast.ReturnStatement:
+				throw new ReturnException(this.evaluate(node.value, scope));
 			case Ast.ForStatement:
 			case Ast.WhileStatement:
 			case Ast.ConditionalStatement:
