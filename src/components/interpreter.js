@@ -84,6 +84,23 @@ export default class Interpreter {
 				const args = value.args.map((arg) => this.evaluate(arg, scope));
 				return caller(args); //Possibly spread the args here??
 			}
+			case Ast.Get: {
+				const caller = this.evaluate(value.caller, scope);
+
+				let get;
+
+				if (value.isExpression) {
+					get = caller[this.evaluate(value.property, scope)];
+				} else {
+					get = caller[value.property];
+				}
+
+				if (get instanceof Function) {
+					return get.bind(caller);
+				}
+
+				return get;
+			}
 			default: {
 				this.error(
 					"Expected expression but got statement: " +
