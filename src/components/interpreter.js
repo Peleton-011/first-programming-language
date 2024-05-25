@@ -12,11 +12,49 @@ export default class Interpreter {
 		return Object.keys(scope).includes(name);
 	}
 
-	evaluate(value, scope) {}
+	evaluate(value, scope) {
+		switch (value.constructor) {
+			case Ast.Variable: {
+				if (!this.inScope(scope, value.name)) {
+					this.error(`Variable not in scope: ${value.name}`);
+				}
+				return scope[value.name];
+			}
+			case Ast.UnaryExpression: {
+				const operations = { "!": (apply) => !apply };
+				return operations[value.operator](
+					this.evaluate(value.apply, scope)
+				);
+			}
+			case Ast.BinaryExpression: {
+				const operations = {
+					"+": (left, right) => left + right,
+					"-": (left, right) => left - right,
+					"*": (left, right) => left * right,
+					"/": (left, right) => left / right,
+					//"%": (left, right) => left % right,
+					"==": (left, right) => left == right,
+					"!=": (left, right) => left != right,
+					">": (left, right) => left > right,
+					"<": (left, right) => left < right,
+					">=": (left, right) => left >= right,
+					"<=": (left, right) => left <= right,
+					"&&": (left, right) => left && right,
+					"||": (left, right) => left || right,
+				};
+				return operations[value.operator](
+					this.evaluate(value.left, scope),
+					this.evaluate(value.right, scope)
+				);
+			}
+		}
+	}
 
 	execute(node, scope) {
 		switch (node.constructor.name) {
 			case Ast.Variable:
+				scope[node.name] = this.evaluate(node.value, scope);
+				return scope;
 			case Ast.Set:
 			case Ast.StructStatement:
 			case Ast.FunctionStatement:
