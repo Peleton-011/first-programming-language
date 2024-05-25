@@ -116,7 +116,7 @@ export default class Interpreter {
 	}
 
 	execute(node, scope) {
-		switch (node.constructor.name) {
+		switch (node.constructor) {
 			case Ast.Variable:
 				scope[node.name] = this.evaluate(node.value, scope);
 				return scope;

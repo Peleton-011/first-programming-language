@@ -1,5 +1,8 @@
-[4 + 21, 5, 27, 89]
-2006 / 4012 + 2
+
+sketch func needs (a, b) {
+    ink(a+b)
+}
 
 ink("Hello worlde!")
 ink(round(random(0, 100)))
+func(3, 6)
