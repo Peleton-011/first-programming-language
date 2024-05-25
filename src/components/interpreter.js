@@ -53,6 +53,21 @@ export default class Interpreter {
 			case Ast.Array: {
 				return value.value.map((item) => this.evaluate(item, scope));
 			}
+			case Ast.Instance: {
+				if (!this.inScope(scope, value.name)) {
+					this.error(`Variable not in scope: ${value.name}`);
+				}
+
+				const constructor = scope[value.name];
+				const members = {};
+				for (const [member, memberValue] of Object.entries(
+					value.members
+				)) {
+					members[member] = this.evaluate(memberValue, scope);
+				}
+
+				return constructor(members);
+			}
 			default: {
 				this.error(
 					"Expected expression but got statement: " +
@@ -68,7 +83,22 @@ export default class Interpreter {
 				scope[node.name] = this.evaluate(node.value, scope);
 				return scope;
 			case Ast.Set:
-			case Ast.StructStatement:
+			case Ast.StructStatement: {
+				scope[node.name] = (members) => {
+					//Check for invalid keys
+					const instance = {};
+					for (const key of Object.keys(members)) {
+						if (!node.members.includes(key)) {
+							this.error(
+								`Invalid key: ${key} found while creating instance of ${node.name}`
+							);
+						}
+						instance[key] = members[key];
+					}
+					return instance;
+				};
+				return scope;
+			}
 			case Ast.FunctionStatement:
 			case Ast.ReturnStatement:
 			case Ast.ForStatement:
