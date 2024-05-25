@@ -1,6 +1,7 @@
 import fs from "fs";
 import { Lexer } from "./src/components/lexer.js";
 import { Parser } from "./src/components/parser.js";
+import { Interpreter } from "./src/components/interpreter.js";
 import { EaselError } from "./src/stdlib.js";
 
 const readFile = (path) => {
@@ -33,7 +34,9 @@ const writeFile = (path, data) => {
 	argv = argv.filter((arg) => arg !== "--debug");
 
 	const path = argv[0];
+
 	if (path) {
+		//Tokenize
 		const code = await readFile(path);
 		console.log(code);
 		const lexer = new Lexer(code);
@@ -50,6 +53,7 @@ const writeFile = (path, data) => {
 				);
 		}
 
+		//Parse
 		const parser = new Parser(lexer.tokens);
 		try {
 			parser.parse();
@@ -61,6 +65,21 @@ const writeFile = (path, data) => {
 				await writeFile(
 					"./debug/ast_output.json",
 					JSON.stringify(parser.ast, null, 2)
+				);
+		}
+
+		//Interpret
+		const interpreter = new Interpreter();
+		try {
+			interpreter.run(parser.ast);
+		} catch (err) {
+			console.error(err);
+			process.exit(1);
+		} finally {
+			if (debug)
+				await writeFile(
+					"./debug/interpreter_output.json",
+					JSON.stringify(interpreter.memory, null, 2)
 				);
 		}
 	} else {
