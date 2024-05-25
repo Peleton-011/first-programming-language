@@ -75,6 +75,15 @@ export default class Interpreter {
 
 				return constructor(members);
 			}
+            case Ast.Call: {
+                const caller = this.evaluate(value.caller, scope);
+                if (!caller) {
+                    this.error(`Function not found: ${value.caller.name}`);
+                }
+
+                const args = value.args.map((arg) => this.evaluate(arg, scope));
+                return caller(args); //Possibly spread the args here??
+            }
 			default: {
 				this.error(
 					"Expected expression but got statement: " +
