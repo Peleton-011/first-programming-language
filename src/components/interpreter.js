@@ -98,7 +98,18 @@ export default class Interpreter {
 			case Ast.Variable:
 				scope[node.name] = this.evaluate(node.value, scope);
 				return scope;
-			case Ast.Set:
+			case Ast.Set: {
+				if (!this.inScope(scope, node.name)) {
+					this.error(`Variable not in scope: ${node.name}`);
+				}
+
+				scope[node.name][node.property] = this.evaluate(
+					node.value,
+					scope
+				);
+
+				return scope;
+			}
 			case Ast.StructStatement: {
 				scope[node.name] = (members) => {
 					//Check for invalid keys
@@ -156,7 +167,15 @@ export default class Interpreter {
 					this.run(node.body, scope);
 				}
 			}
-			case Ast.ConditionalStatement:
+			case Ast.ConditionalStatement: {
+				if (this.evaluate(node.condition, scope)) {
+					this.run(node.body, scope);
+				} else {
+					for (const statement of node.otherwise) {
+						this.execute(statement, scope);
+					}
+				}
+			}
 			default:
 				this.evaluate(node, scope);
 		}
