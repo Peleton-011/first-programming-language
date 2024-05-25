@@ -75,15 +75,15 @@ export default class Interpreter {
 
 				return constructor(members);
 			}
-            case Ast.Call: {
-                const caller = this.evaluate(value.caller, scope);
-                if (!caller) {
-                    this.error(`Function not found: ${value.caller.name}`);
-                }
+			case Ast.Call: {
+				const caller = this.evaluate(value.caller, scope);
+				if (!caller) {
+					this.error(`Function not found: ${value.caller.name}`);
+				}
 
-                const args = value.args.map((arg) => this.evaluate(arg, scope));
-                return caller(args); //Possibly spread the args here??
-            }
+				const args = value.args.map((arg) => this.evaluate(arg, scope));
+				return caller(args); //Possibly spread the args here??
+			}
 			default: {
 				this.error(
 					"Expected expression but got statement: " +
@@ -138,8 +138,24 @@ export default class Interpreter {
 			}
 			case Ast.ReturnStatement:
 				throw new ReturnException(this.evaluate(node.value, scope));
-			case Ast.ForStatement:
-			case Ast.WhileStatement:
+			case Ast.ForStatement: {
+				const localScope = {
+					...scope,
+					[node.name]: this.evaluate(node.range[0], scope),
+				};
+				while (
+					localScope[node.name] < this.evaluate(node.range[1], scope)
+				) {
+					this.run(node.body, localScope);
+					localScope[node.name] += 1;
+				}
+				break;
+			}
+			case Ast.WhileStatement: {
+				while (this.execute(node.condition, scope)) {
+					this.run(node.body, scope);
+				}
+			}
 			case Ast.ConditionalStatement:
 			default:
 				this.evaluate(node, scope);
